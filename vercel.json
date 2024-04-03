@@ -10,6 +10,6 @@
     { "src": "/(.*)", "dest": "main.py" }
   ],
   "functions": {
-    "timeout": 30
+    "maxDuration": 30
   }
 }
