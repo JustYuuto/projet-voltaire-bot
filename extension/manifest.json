@@ -5,12 +5,18 @@
   "manifest_version": 3,
   "permissions": [
     "activeTab",
-    "scripting"
+    "scripting",
+    "tabs"
   ],
   "content_scripts": [
     {
       "matches": ["https://www.projet-voltaire.fr/*"],
-      "js": ["content_script.js"]
+      "js": ["content_script.js"],
+      "run_at": "document_end"
     }
-  ]
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {}
 }
