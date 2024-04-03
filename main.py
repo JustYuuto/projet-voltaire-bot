@@ -47,13 +47,50 @@ def fix_sentence():
     }],
     max_tokens=500,
   )
-  json = json.loads(response.choices[0].message.content)
+  res_json = json.loads(response.choices[0].message.content)
   return Response(json.dumps({
     "sentence": sentence,
-    "fixed_sentence": json["sentence"],
-    "word_to_click": json["word_to_click"],
+    "fixed_sentence": res_json["sentence"],
+    "word_to_click": res_json["word_to_click"],
     "time_taken": (datetime.now() - now).total_seconds(),
   }), content_type="application/json")
+
+@app.route("/intensive-training", methods=["POST"])
+def intensive_training():
+  """
+  Perform intensive training using the Projet Voltaire Bot.
+
+  This function takes a JSON request with a list of sentences and a rule, and uses the Projet Voltaire Bot to generate a response in French. The response is a JSON object that contains the correctness of each sentence according to the given rule.
+
+  Returns:
+    A JSON response containing the correctness of each sentence.
+
+  Raises:
+    HTTPException: If the request is invalid or missing required fields.
+
+  thank you github copilot
+  """
+  if not request.json or "sentences" not in request.json or "rule" not in request.json:
+    response = Response(json.dumps({
+      "status": 400,
+      "message": "Bad Request",
+      "description": "The request must be a JSON with a key \"sentences\" and a key \"rule\"."
+    }), status=400, content_type="application/json")
+    raise HTTPException("Bad Request", response=response)
+  
+  sentences = request.json["sentences"]
+  rule = request.json["rule"]
+  prompt = "reply in french. Suivant cette règle : \"{}\" Les phrases :\n- {}\nSont elles correctes ? Répond avec du JSON avec un tableau d'objets qui prend comme clés \"sentence\" pour la phrase et la clé \"correct\" si cette dernière est correcte.".format(rule, "\n- ".join(sentences))
+  response = client.chat.completions.create(
+    model="gpt-4",
+    response_format={ "type": "json_object" },
+    messages=[{
+      "role": "user", "content": prompt
+    }],
+    max_tokens=500,
+  )
+  res_json = json.loads(response.choices[0].message.content)
+  return Response(json.dumps(res_json), content_type="application/json")
 
 @app.errorhandler(HTTPException)
 def handle_exception(e):
