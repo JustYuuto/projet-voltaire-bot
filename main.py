@@ -47,11 +47,11 @@ def fix_sentence():
     }],
     max_tokens=500,
   )
-  json = json.loads(response.choices[0].message.content)
+  res_json = json.loads(response.choices[0].message.content)
   return Response(json.dumps({
     "sentence": sentence,
-    "fixed_sentence": json["sentence"],
-    "word_to_click": json["word_to_click"],
+    "fixed_sentence": res_json["sentence"],
+    "word_to_click": res_json["word_to_click"],
     "time_taken": (datetime.now() - now).total_seconds(),
   }), content_type="application/json")
 
