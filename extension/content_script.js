@@ -1,5 +1,6 @@
 (() => {
-  const apiUrl = 'https://projet-voltaire-bot.vercel.app';
+  // const apiUrl = 'https://projet-voltaire-bot.vercel.app';
+  const apiUrl = 'http://localhost:5000';
 
   const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   const processSentence = () => {
@@ -41,7 +42,7 @@
   }
 
   const handleIntensiveTrainingPopup = async () => {
-    if (document.querySelector('.exitButton.primaryButton').style.display === 'none') {
+    if (document.querySelector('.exitButton.primaryButton')?.style?.display === 'none') {
       document.querySelector('.understoodButton').click();
     }
     await wait(500);
@@ -66,6 +67,8 @@
       }
       await wait(500);
       document.querySelector('.exitButton.primaryButton').click();
+      await wait(500);
+      run();
     }).catch((error) => {
       console.error('[Projet Voltaire Bot] Erreur lors de la correction de l\'entraînement intensif :', error);
       if (error.message === 'Failed to fetch') {
@@ -73,10 +76,12 @@
       }
     });
   }
-
-  if (document.querySelector('.intensiveQuestion') && document.querySelector('.intensiveTraining')) {
-    handleIntensiveTrainingPopup();
-  } else if (document.querySelector('.sentence')) {
-    processSentence();
+  const run = () => {
+    if (document.querySelector('.intensiveQuestion') && document.querySelector('.intensiveTraining')) {
+      handleIntensiveTrainingPopup();
+    } else if (document.querySelector('.sentence')) {
+      processSentence();
+    }
   }
+  run();
 })();
