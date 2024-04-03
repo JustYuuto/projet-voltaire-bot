@@ -2,8 +2,7 @@
   "name": "Projet Voltaire Bot",
   "description": "Un bot pour faire le Projet Voltaire à votre place :p",
   "version": "1.0.0",
-  "main": "content_script.js",
-  "manifest_version": 2,
+  "manifest_version": 3,
   "permissions": [
     "activeTab",
     "scripting"

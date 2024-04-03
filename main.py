@@ -38,7 +38,7 @@ def fix_sentence():
   
   now = datetime.now()
   sentence = request.json["sentence"]
-  prompt = "Reply in french. Corrige les fautes dans cette phrase. \"{}\"".format(sentence)
+  prompt = "Reply in french. Corrige les fautes dans cette phrase. Répond avec du JSON avec la clé \"sentence\" pour la phrase corrigée suivi de la clé \"word_to_click\" avec comme valeur le mot non corrigé qui a été corrigé.  \"{}\"".format(sentence)
   response = client.chat.completions.create(
     model="gpt-4",
     response_format={ "type": "json_object" },
@@ -47,9 +47,11 @@ def fix_sentence():
     }],
     max_tokens=500,
   )
+  json = json.loads(response.choices[0].message.content)
   return Response(json.dumps({
     "sentence": sentence,
-    "fixed_sentence": response.choices[0].message.content,
+    "fixed_sentence": json["sentence"],
+    "word_to_click": json["word_to_click"],
     "time_taken": (datetime.now() - now).total_seconds(),
   }), content_type="application/json")
 
