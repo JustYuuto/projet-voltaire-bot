@@ -58,7 +58,17 @@ def fix_sentence():
 @app.route("/intensive-training", methods=["POST"])
 def intensive_training():
   """
-  
+  Perform intensive training using the Projet Voltaire Bot.
+
+  This function takes a JSON request with a list of sentences and a rule, and uses the Projet Voltaire Bot to generate a response in French. The response is a JSON object that contains the correctness of each sentence according to the given rule.
+
+  Returns:
+    A JSON response containing the correctness of each sentence.
+
+  Raises:
+    HTTPException: If the request is invalid or missing required fields.
+
+  thank you github copilot
   """
   if not request.json or "sentences" not in request.json or "rule" not in request.json:
     response = Response(json.dumps({
@@ -68,11 +78,9 @@ def intensive_training():
     }), status=400, content_type="application/json")
     raise HTTPException("Bad Request", response=response)
   
-  now = datetime.now()
   sentences = request.json["sentences"]
   rule = request.json["rule"]
   prompt = "reply in french. Suivant cette règle : \"{}\" Les phrases :\n- {}\nSont elles correctes ? Répond avec du JSON avec un tableau d'objets qui prend comme clés \"sentence\" pour la phrase et la clé \"correct\" si cette dernière est correcte.".format(rule, "\n- ".join(sentences))
-  print(prompt)
   response = client.chat.completions.create(
     model="gpt-4",
     response_format={ "type": "json_object" },
