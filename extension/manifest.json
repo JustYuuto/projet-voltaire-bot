@@ -1,0 +1,17 @@
+{
+  "name": "Projet Voltaire Bot",
+  "description": "Un bot pour faire le Projet Voltaire à votre place :p",
+  "version": "1.0.0",
+  "main": "content_script.js",
+  "manifest_version": 2,
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://www.projet-voltaire.fr/*"],
+      "js": ["content_script.js"]
+    }
+  ]
+}
