@@ -10,7 +10,7 @@ CORS(app)
 client = Client()
 
 @app.route("/")
-def index():
+def home():
   """This route redirect to the GitHub repository of the project."""
   return redirect("https://github.com/JustYuuto/projet-voltaire-bot", code=301)
 
