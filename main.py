@@ -55,6 +55,35 @@ def fix_sentence():
     "time_taken": (datetime.now() - now).total_seconds(),
   }), content_type="application/json")
 
+@app.route("/intensive-training", methods=["POST"])
+def intensive_training():
+  """
+  
+  """
+  if not request.json or "sentences" not in request.json or "rule" not in request.json:
+    response = Response(json.dumps({
+      "status": 400,
+      "message": "Bad Request",
+      "description": "The request must be a JSON with a key \"sentences\" and a key \"rule\"."
+    }), status=400, content_type="application/json")
+    raise HTTPException("Bad Request", response=response)
+  
+  now = datetime.now()
+  sentences = request.json["sentences"]
+  rule = request.json["rule"]
+  prompt = "reply in french. Suivant cette règle : \"{}\" Les phrases :\n- {}\nSont elles correctes ? Répond avec du JSON avec un tableau d'objets qui prend comme clés \"sentence\" pour la phrase et la clé \"correct\" si cette dernière est correcte.".format(rule, "\n- ".join(sentences))
+  print(prompt)
+  response = client.chat.completions.create(
+    model="gpt-4",
+    response_format={ "type": "json_object" },
+    messages=[{
+      "role": "user", "content": prompt
+    }],
+    max_tokens=500,
+  )
+  res_json = json.loads(response.choices[0].message.content)
+  return Response(json.dumps(res_json), content_type="application/json")
+
 @app.errorhandler(HTTPException)
 def handle_exception(e):
     """Return JSON instead of HTML for HTTP errors."""
