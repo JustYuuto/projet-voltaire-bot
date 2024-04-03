@@ -8,8 +8,5 @@
   ],
   "routes": [
     { "src": "/(.*)", "dest": "main.py" }
-  ],
-  "functions": {
-    "maxDuration": 30
-  }
+  ]
 }
