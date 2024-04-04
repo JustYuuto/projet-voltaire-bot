@@ -21,17 +21,25 @@
         }
         return response.json();
       })
-      .then(async ({
-        word_to_click, sentence
-      }) => {
+      .then(async ({ word_to_click, sentence }) => {
         console.log('[Projet Voltaire Bot] Correction de la phrase :', sentence);
-        console.log('[Projet Voltaire Bot] Mot à cliquer :', word_to_click);
-        const element = Array.from(document.querySelectorAll('.pointAndClickSpan')).find((el) => el.textContent === word_to_click || el.textContent.includes(word_to_click));
-        element.click();
-
-        document.querySelector('.nextButton').click();
+        if (word_to_click && word_to_click !== 'null') {
+          console.log('[Projet Voltaire Bot] Mot à cliquer :', word_to_click);
+          const element = Array.from(document.querySelectorAll('.pointAndClickSpan')).find((el) => {
+            return el.textContent === word_to_click || el.textContent.includes(word_to_click) || 
+              // the dash is a special character in the html and not a normal dash!!
+              word_to_click.split('‑').some((word) => el.textContent.includes(word)) ||
+              word_to_click.split('\'').some((word) => el.textContent.includes(word));
+          });
+          element.click();
+        } else {
+          console.log('[Projet Voltaire Bot] Aucune erreur détectée dans la phrase');
+          document.querySelector('.noMistakeButton').click();
+        }
         await wait(500);
-        processSentence();
+        document.querySelector('.nextButton').click();
+        await wait(1000);
+        run();
       })
       .catch((error) => {
         console.error('[Projet Voltaire Bot] Erreur lors de la correction de la phrase :', error);
@@ -42,7 +50,7 @@
   }
 
   const handleIntensiveTrainingPopup = async () => {
-    if (document.querySelector('.exitButton.primaryButton')?.style?.display === 'none') {
+    if (document.querySelector('.exitButton')?.style?.display === 'none' && document.querySelector('.understoodButton')?.style?.display === 'none') {
       document.querySelector('.understoodButton').click();
     }
     await wait(500);
@@ -66,8 +74,15 @@
         document.querySelectorAll('.intensiveQuestion')[i].querySelector(`.button${correct ? 'Ok' : 'Ko'}`).click();
       }
       await wait(500);
+      const message = document.querySelector('.messageContainer');
+      if (message && message.style.visibility !== 'hidden') {
+        document.querySelector('.retryButton').click();
+        await wait(500);
+        handleIntensiveTrainingPopup();
+        return;
+      }
       document.querySelector('.exitButton.primaryButton').click();
-      await wait(500);
+      await wait(1000);
       run();
     }).catch((error) => {
       console.error('[Projet Voltaire Bot] Erreur lors de la correction de l\'entraînement intensif :', error);
@@ -76,12 +91,57 @@
       }
     });
   }
-  const run = () => {
-    if (document.querySelector('.intensiveQuestion') && document.querySelector('.intensiveTraining')) {
+  const processVoiceExercise = async (message) => {
+    await wait(500);
+    console.log('[Projet Voltaire Bot] Exercice avec voix détecté');
+    fetch(apiUrl + '/put-word', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        sentence: document.querySelector('.sentence').textContent.replace('  ', ' {} ').replace(' .', ' {}.'),
+        audio_url: message.url,
+      }),
+    })
+      .then((response) => {
+        if (response.status !== 200 || !response.ok) {
+          return processVoiceExercise(message);
+        }
+        return response.json();
+      })
+      .then(async ({ missing_word }) => {
+        console.log('[Projet Voltaire Bot] Mot à écrire :', missing_word);
+        document.querySelector('input.writingExerciseSpan').value = missing_word;
+        await wait(1000);
+        document.querySelector('.validateButton').click();
+        await wait(500);
+        document.querySelector('.nextButton').click();
+        await wait(1000);
+        run();
+      })
+      .catch((error) => {
+        console.error('[Projet Voltaire Bot] Erreur lors de la correction de la phrase :', error);
+        if (error.message === 'Failed to fetch') processVoiceExercise(message);
+      });
+  }
+  const run = async () => {
+    if (document.querySelector('.popupPanelLessonVideo')) {
+      await wait(500);
+      document.querySelector('.popupButton#btn_fermer').click();
+    } else if (document.querySelector('.intensiveTraining')) {
       handleIntensiveTrainingPopup();
-    } else if (document.querySelector('.sentence')) {
+    } else if (document.querySelector('.sentence') && document.querySelector('.pointAndClickSpan')) {
       processSentence();
+    } else if (document.querySelector('.sentenceAudioReader')) {
+      chrome.runtime.sendMessage({ type: 'mute_tab' });
+      document.querySelector('.replayButton').click();
     }
   }
   run();
+
+  // Listen for messages from the background script
+  chrome.runtime.onMessage.addListener((message) => {
+    if (message.type === 'exercise_voice') processVoiceExercise(message);
+  });
 })();

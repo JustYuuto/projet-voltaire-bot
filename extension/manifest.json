@@ -6,7 +6,11 @@
   "permissions": [
     "activeTab",
     "scripting",
-    "tabs"
+    "tabs",
+    "webRequest"
+  ],
+  "host_permissions": [
+    "https://www.projet-voltaire.fr/*"
   ],
   "content_scripts": [
     {
