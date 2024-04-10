@@ -11,7 +11,7 @@ Une API en Python pour "botter" le projet Voltaire en utilisant GPT-4.
 
 ## Installer le serveur en local
 
-1. Installez Python
+1. Installez Python (**pensez à cocher "Add python.exe to PATH"**)
 2. Installez les dépendances avec `pip install -r requirements.txt`
 3. Lancez le serveur avec `flask --app main run`
 4. C'est bon
