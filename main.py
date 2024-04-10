@@ -152,6 +152,32 @@ def put_word():
     "missing_word": missing_word,
   }), content_type="application/json")
 
+@app.route("/nearest-word", methods=["POST"])
+def nearest_word():
+  if not request.json or "word" not in request.json or "nearest_words" not in request.json:
+    response = Response(json.dumps({
+      "status": 400,
+      "message": "Bad Request",
+      "description": "The request must be a JSON with a key \"word\" and a key \"nearest_words\"."
+    }), status=400, content_type="application/json")
+    raise HTTPException("Bad Request", response=response)
+  
+  word: str = request.json["word"]
+  nearest_words: list = request.json["nearest_words"]
+
+  nearest_word = json.loads(client.chat.completions.create(
+    model="gpt-4",
+    response_format={ "type": "json_object" },
+    messages=[{
+      "role": "user", "content": "Reply in french. Quel est le mot le plus proche de \"{}\" parmis les suivants : {}. Répond en json avec une clé \"word\".".format(word, ", ".join(nearest_words))
+    }],
+    max_tokens=500,
+  ).choices[0].message.content)
+
+  return Response(json.dumps({
+    "word": nearest_word['word'],
+  }), content_type="application/json")
+
 @app.errorhandler(HTTPException)
 def handle_exception(e):
     """Return JSON instead of HTML for HTTP errors."""

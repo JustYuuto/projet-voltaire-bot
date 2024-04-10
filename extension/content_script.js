@@ -92,6 +92,7 @@
     });
   }
   const processVoiceExercise = async (message) => {
+    if (!document.querySelector('.qccv-question-container')) return;
     await wait(500);
     console.log('[Projet Voltaire Bot] Exercice avec voix détecté');
     fetch(apiUrl + '/put-word', {
@@ -125,6 +126,39 @@
         if (error.message === 'Failed to fetch') processVoiceExercise(message);
       });
   }
+  const handleNearestWordQuestion = () => {
+    const word = document.querySelector('.qccv-question');
+    const nearest_words = Array.from(document.querySelectorAll('.qc-proposal-button')).map((el) => el.textContent);
+    fetch(apiUrl + '/nearest-word', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ word: word.textContent, nearest_words }),
+    })
+      .then((response) => {
+        if (response.status !== 200 || !response.ok) {
+          return handleNearestWordQuestion();
+        }
+        return response.json();
+      })
+      .then(async ({ word }) => {
+        console.log('[Projet Voltaire Bot] Mot le plus proche :', word);
+        const element = Array.from(document.querySelectorAll('.qc-proposal-button')).find((el) => {
+          return el.textContent.toLowerCase() === word.toLowerCase() || 
+            el.textContent.toLowerCase().includes(word.toLowerCase());
+        });
+        element.click();
+        await wait(500);
+        document.querySelector('.qccv-next').click();
+        await wait(1000);
+        run();
+      })
+      .catch((error) => {
+        console.error('[Projet Voltaire Bot] Erreur lors de la correction de la question :', error);
+        if (error.message === 'Failed to fetch') handleNearestWordQuestion();
+      });
+  }
   const run = async () => {
     if (document.querySelector('.popupPanelLessonVideo')) {
       await wait(500);
@@ -133,15 +167,17 @@
       handleIntensiveTrainingPopup();
     } else if (document.querySelector('.sentence') && document.querySelector('.pointAndClickSpan')) {
       processSentence();
-    } else if (document.querySelector('.sentenceAudioReader')) {
+    } else if (document.querySelector('.sentenceAudioReader') && !document.querySelector('.qccv-question-container')) {
       chrome.runtime.sendMessage({ type: 'mute_tab' });
       document.querySelector('.replayButton').click();
+    } else if (document.querySelector('.qccv-question-container')) {
+      handleNearestWordQuestion();
     }
   }
   run();
 
   // Listen for messages from the background script
   chrome.runtime.onMessage.addListener((message) => {
-    if (message.type === 'exercise_voice') processVoiceExercise(message);
+    if (message.type === 'exercise_voice' && !document.querySelector('.qccv-question-container')) processVoiceExercise(message);
   });
 })();
