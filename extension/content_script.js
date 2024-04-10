@@ -160,7 +160,11 @@
       });
   }
   const run = async () => {
-    if (document.querySelector('.popupPanelLessonVideo')) {
+    if (document.querySelector('.activity-selector-cell-launch-button:not([style^="display"])')) {
+      document.querySelector('.activity-selector-cell-launch-button:not([style^="display"])').click();
+      await wait(1000);
+      run();
+    } else if (document.querySelector('.popupPanelLessonVideo')) {
       await wait(500);
       document.querySelector('.popupButton#btn_fermer').click();
     } else if (document.querySelector('.intensiveTraining')) {
@@ -172,6 +176,10 @@
       document.querySelector('.replayButton').click();
     } else if (document.querySelector('.qccv-question-container')) {
       handleNearestWordQuestion();
+    } else if (document.querySelector('.trainingEndViewCongrate')) {
+      document.querySelector('#btn_apprentissage_autres_niveaux').click();
+      await wait(1000);
+      run();
     }
   }
   run();

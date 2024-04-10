@@ -2,11 +2,12 @@
 
 Une API en Python pour "botter" le projet Voltaire en utilisant GPT-4.
 
-## Utilisation
+## Taux de réussite
 
-Pour utiliser le bot vous pouvez installer l'extension pour navigateur, elle utilise l'API de ce repo.
-
-Si vous souhaitez utiliser l'API directement, vous pouvez le faire en faisant une requête POST à `https://projet-voltaire-bot.vercel.app/fix-sentence`. Le corps de la requête doit être un JSON avec le champ `sentence` qui est la phrase à corriger.
+| Entraînement | Fonctionne ? |
+|--------------|-----------------------|
+| Orthographe  | À tester complètement |
+| Expression   | Oui nickel |
 
 ## Installer l'extension
 
