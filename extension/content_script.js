@@ -143,6 +143,7 @@
         return response.json();
       })
       .then(async ({ word }) => {
+        word = word.replace('-', '‑');
         console.log('[Projet Voltaire Bot] Mot le plus proche :', word);
         const element = Array.from(document.querySelectorAll('.qc-proposal-button')).find((el) => {
           return el.textContent.toLowerCase() === word.toLowerCase() || 
