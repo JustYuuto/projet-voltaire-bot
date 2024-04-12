@@ -2,6 +2,9 @@
 
 Une API en Python pour "botter" le projet Voltaire en utilisant GPT-4.
 
+> [!NOTE]
+> Ce projet est à but purement éducatif, je ne suis pas responsable de l'utilisation que vous en faites. Si vous vous faites choper en train de tricher c'est pas ma faute mdrrr 🫵🫵😂😂
+
 ## Taux de réussite
 
 | Entraînement | Fonctionne ? |
