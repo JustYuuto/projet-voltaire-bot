@@ -33,7 +33,7 @@ Pour utiliser le bot, il suffit de [lancer le serveur en local](#installer-le-se
 
 ### Installer l'extension
 
-### Chrome, Edge, Opera, Brave, Vivaldi, etc.
+#### Chrome, Edge, Opera, Brave, Vivaldi, etc.
 
 1. Ouvrez chrome://extensions/
 2. Activez le mode développeur
@@ -41,7 +41,7 @@ Pour utiliser le bot, il suffit de [lancer le serveur en local](#installer-le-se
 4. Sélectionnez le dossier `extension` de ce repo
 5. Pour que l'extension s'active, rendez vous sur une page du projet Voltaire, et cliquez sur l'icône de l'extension en haut à droite de votre navigateur.
 
-### Firefox
+#### Firefox
 
 1. Ouvrez about:debugging
 2. Cliquez sur "This Firefox"
