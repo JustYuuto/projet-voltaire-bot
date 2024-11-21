@@ -1,4 +1,4 @@
-# projet-voltaire-bot
+# Projet Voltaire Bot
 
 Une API en Python pour "botter" le projet Voltaire en utilisant GPT-4.
 
@@ -7,23 +7,33 @@ Une API en Python pour "botter" le projet Voltaire en utilisant GPT-4.
 
 ## Taux de réussite
 
-| Entraînement | Fonctionne ? |
+| Entraînement | Fonctionne ?          |
 |--------------|-----------------------|
 | Orthographe  | À tester complètement |
-| Expression   | Oui nickel |
+| Expression   | Oui nickel            |
 
-## Installer le serveur en local
+## Utilisation
 
-1. Installez Python (**pensez à cocher "Add python.exe to PATH"**)
-2. Installez les dépendances avec `pip install -r requirements.txt`
-3. Lancez le serveur avec `flask --app main run`
-4. C'est bon
+Première chose, télécharger le repo : https://github.com/JustYuuto/projet-voltaire-bot/archive/refs/heads/master.zip
 
-## Installer l'extension
+Pour utiliser le bot, il suffit de [lancer le serveur en local](#installer-le-serveur-en-local) et d'installer [l'extension dans votre navigateur](#installer-lextension).
 
-Première chose téléchargez le repo en cliquant sur le bouton vert "Code" puis "Download ZIP". Ensuite, extrayez le fichier ZIP.
+> [!WARNING]
+> **Attention :** L'extension ne fonctionne qu'avec cette interface du projet Voltaire : 
+> ![Interface du projet Voltaire](/screenshot.png)
 
-### Chrome et navigateurs basés sur Chromium
+### Installer le serveur en local
+
+1. Installez Python (**pensez à cocher "Add python.exe to PATH"**).
+   Je recommande d'utiliser Python 3.12 pour éviter les erreurs de compatibilité avec certaines dépendances.
+2. Ouvrez un terminal dans le dossier du repo
+3. Installez les dépendances avec la commande `pip install -r requirements.txt`
+4. Lancez le serveur avec la commande `flask --app main run`
+5. Normalement, le serveur devrait être lancé.
+
+### Installer l'extension
+
+### Chrome, Edge, Opera, Brave, Vivaldi, etc.
 
 1. Ouvrez chrome://extensions/
 2. Activez le mode développeur
