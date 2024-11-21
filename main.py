@@ -10,7 +10,7 @@ import subprocess
 import os
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins="https://www.projet-voltaire.fr")
 client = Client()
 r = sr.Recognizer()
 
