@@ -24,13 +24,12 @@ Pour utiliser le bot, il suffit de [lancer le serveur en local](#installer-le-se
 
 ### Installer le serveur en local
 
-1. Installez Python (**pensez à cocher "Add python.exe to PATH"**).
-   
+1. Installez Python (**pensez à cocher "Add python.exe to PATH"**).<br/>
    Je recommande d'utiliser Python 3.12 pour éviter les erreurs de compatibilité avec certaines dépendances.
-2. Ouvrez un terminal dans le dossier du repo
-3. Installez les dépendances avec la commande `pip install -r requirements.txt`
-4. Lancez le serveur avec la commande `flask --app main run`
-5. Normalement, le serveur devrait être lancé.
+2. Allez dans le dossier de ce repo
+3. Lancez le script `start.bat` pour installer les dépendances et lancer le serveur.
+4. Si tout s'est bien passé, vous devriez voir un message du type `Running on http://....`
+5. Vous pouvez maintenant [installer l'extension](#installer-lextension).
 
 ### Installer l'extension
 
