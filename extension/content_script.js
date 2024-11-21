@@ -26,7 +26,7 @@
         if (word_to_click && word_to_click !== 'null') {
           console.log('[Projet Voltaire Bot] Mot à cliquer :', word_to_click);
           const element = Array.from(document.querySelectorAll('.pointAndClickSpan')).find((el) => {
-            return el.textContent === word_to_click || el.textContent.includes(word_to_click) || 
+            return el.textContent === word_to_click || el.textContent.includes(word_to_click) ||
               // the dash is a special character in the html and not a normal dash!!
               word_to_click.split('‑').some((word) => el.textContent.includes(word)) ||
               word_to_click.split('\'').some((word) => el.textContent.includes(word));
@@ -56,17 +56,14 @@
     await wait(500);
     fetch(apiUrl + '/intensive-training', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         rule: new DOMParser().parseFromString(document.querySelector('.rule-details-description').innerHTML.split('<br>')[0], 'text/html').body.textContent,
         sentences: Array.from(document.querySelectorAll('.intensiveQuestion .sentence')).map((el) => el.textContent),
       }),
     }).then((response) => {
-      if (response.status !== 200 || !response.ok) {
+      if (response.status !== 200 || !response.ok)
         return handleIntensiveTrainingPopup();
-      }
       return response.json();
     }).then(async (res) => {
       for (let i = 0; i < res.length; i++) {
@@ -75,7 +72,7 @@
       }
       await wait(500);
       const message = document.querySelector('.messageContainer');
-      if (message && message.style.visibility !== 'hidden') {
+      if (message && message.style.visibility !== 'hidden' && message.textContent.includes('Il faut trois bonnes réponses')) {
         document.querySelector('.retryButton').click();
         await wait(500);
         handleIntensiveTrainingPopup();
@@ -91,8 +88,8 @@
       }
     });
   }
-  const processVoiceExercise = async (message) => {
-    if (!document.querySelector('.qccv-question-container')) return;
+  const processVoiceExercise = async (url) => {
+    if (!document.querySelector('.sentenceAudioReader')) return;
     await wait(500);
     console.log('[Projet Voltaire Bot] Exercice avec voix détecté');
     fetch(apiUrl + '/put-word', {
@@ -101,13 +98,13 @@
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        sentence: document.querySelector('.sentence').textContent.replace('  ', ' {} ').replace(' .', ' {}.'),
-        audio_url: message.url,
+        sentence: document.querySelector('.sentenceOuter .sentence').textContent.replace('  ', ' {} ').replace(' .', ' {}.'),
+        audio_url: url,
       }),
     })
       .then((response) => {
         if (response.status !== 200 || !response.ok) {
-          return processVoiceExercise(message);
+          return processVoiceExercise(url);
         }
         return response.json();
       })
@@ -123,7 +120,7 @@
       })
       .catch((error) => {
         console.error('[Projet Voltaire Bot] Erreur lors de la correction de la phrase :', error);
-        if (error.message === 'Failed to fetch') processVoiceExercise(message);
+        if (error.message === 'Failed to fetch') processVoiceExercise(url);
       });
   }
   const handleNearestWordQuestion = () => {
@@ -146,7 +143,7 @@
         word = word.replace('-', '‑');
         console.log('[Projet Voltaire Bot] Mot le plus proche :', word);
         const element = Array.from(document.querySelectorAll('.qc-proposal-button')).find((el) => {
-          return el.textContent.toLowerCase() === word.toLowerCase() || 
+          return el.textContent.toLowerCase() === word.toLowerCase() ||
             el.textContent.toLowerCase().includes(word.toLowerCase());
         });
         element.click();
@@ -168,13 +165,15 @@
     } else if (document.querySelector('.popupPanelLessonVideo')) {
       await wait(500);
       document.querySelector('.popupButton#btn_fermer').click();
+      await wait(500);
+      run();
     } else if (document.querySelector('.intensiveTraining')) {
       handleIntensiveTrainingPopup();
     } else if (document.querySelector('.sentence') && document.querySelector('.pointAndClickSpan')) {
       processSentence();
-    } else if (document.querySelector('.sentenceAudioReader') && !document.querySelector('.qccv-question-container')) {
+    } else if (document.querySelector('.sentenceAudioReader') && document.querySelector('.writingExerciseSpan')) {
       chrome.runtime.sendMessage({ type: 'mute_tab' });
-      document.querySelector('.replayButton').click();
+      processVoiceExercise(document.querySelector('.sentenceAudioReader audio').src);
     } else if (document.querySelector('.qccv-question-container')) {
       handleNearestWordQuestion();
     } else if (document.querySelector('.trainingEndViewCongrate')) {
@@ -184,9 +183,4 @@
     }
   }
   run();
-
-  // Listen for messages from the background script
-  chrome.runtime.onMessage.addListener((message) => {
-    if (message.type === 'exercise_voice' && !document.querySelector('.qccv-question-container')) processVoiceExercise(message);
-  });
 })();

@@ -43,7 +43,7 @@ def fix_sentence():
 
   now = datetime.now()
   sentence = request.json["sentence"]
-  prompt = "Reply in french. Corrige les fautes dans cette phrase. Répond avec du JSON avec la clé \"sentence\" pour la phrase corrigée suivi de la clé \"word_to_click\" avec comme valeur le mot non corrigé qui a été corrigé. S'il n'y pas de faute \"word_to_click\" doit être null. \"{}\"".format(sentence)
+  prompt = "Corrige les fautes dans cette phrase. Répond avec du JSON avec la clé \"sentence\" pour la phrase corrigée suivi de la clé \"word_to_click\" avec comme valeur le mot non corrigé qui a été corrigé. S'il n'y pas de faute \"word_to_click\" doit être null. \"{}\"".format(sentence)
   response = client.chat.completions.create(
     model="gpt-4",
     response_format={ "type": "json_object" },
@@ -126,7 +126,7 @@ def put_word():
     sentence = sentence.replace("  ", " {} ")
 
   audio_file = requests.get(audio_url)
-  audio_filename = os.path.abspath("./tmp/audio{}.mp3".format(datetime.timestamp(datetime.now())))
+  audio_filename = os.path.abspath("./audio{}.mp3".format(datetime.timestamp(datetime.now())))
   audio_wav_filename = audio_filename[:-3] + 'wav'
   with open(audio_filename, "wb") as f:
     f.write(audio_file.content)

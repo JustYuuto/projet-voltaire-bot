@@ -1,6 +1,6 @@
 # Projet Voltaire Bot
 
-Une API en Python pour "botter" le projet Voltaire en utilisant GPT-4.
+Une API en Python pour "botter" le projet Voltaire en utilisant GPT-4. Etant donné l'utilisation de GPT-4, il est possible que le bot clique sur des réponses fausses, néanmoins cela reste très rare.
 
 > [!NOTE]
 > Ce projet est à but purement éducatif, je ne suis pas responsable de l'utilisation que vous en faites. Si vous vous faites choper en train de tricher c'est pas ma faute mdrrr 🫵🫵😂😂
