@@ -27,7 +27,14 @@ Pour utiliser le bot, il suffit de [lancer le serveur en local](#installer-le-se
 1. Installez Python (**pensez à cocher "Add python.exe to PATH"**).<br/>
    Je recommande d'utiliser Python 3.12 pour éviter les erreurs de compatibilité avec certaines dépendances.
 2. Allez dans le dossier de ce repo
-3. Lancez le script `start.bat` pour installer les dépendances et lancer le serveur.
+3. **Sur Windows :** Lancez le script `start.bat` pour installer les dépendances et lancer le serveur.<br/>
+   **Sur Linux/macOS :** Lancez les commandes suivantes dans un terminal :
+   ```bash
+   python -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
+   flask --app main run
+   ```
 4. Si tout s'est bien passé, vous devriez voir un message du type `Running on http://....`
 5. Vous pouvez maintenant [installer l'extension](#installer-lextension).
 
