@@ -8,10 +8,20 @@ import speech_recognition as sr
 import requests
 import subprocess
 import os
+import os.path
+from g4f.cookies import set_cookies_dir, read_cookie_files
+import asyncio
+import g4f.debug
+g4f.debug.logging = True
 
+asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 app = Flask(__name__)
 CORS(app, origins="https://www.projet-voltaire.fr")
 client = Client()
+if os.path.exists("har_and_cookies"):
+  cookies_dir = os.path.join(os.path.dirname(__file__), "har_and_cookies")
+  set_cookies_dir(cookies_dir)
+  read_cookie_files(cookies_dir)
 r = sr.Recognizer()
 
 @app.route("/")
@@ -43,9 +53,10 @@ def fix_sentence():
 
   now = datetime.now()
   sentence = request.json["sentence"]
-  prompt = "Corrige les fautes dans cette phrase. Répond avec du JSON avec la clé \"sentence\" pour la phrase corrigée suivi de la clé \"word_to_click\" avec comme valeur le mot non corrigé qui a été corrigé. S'il n'y pas de faute \"word_to_click\" doit être null. \"{}\"".format(sentence)
+  prompt = "Corrige les fautes dans cette phrase : \"{}\". Répond avec du JSON avec la clé \"sentence\" pour la phrase corrigée suivi de la clé \"word_to_click\" avec comme valeur le mot non corrigé qui a été corrigé. S'il n'y pas de faute \"word_to_click\" doit être null.".format(sentence)
+  print("Prompt:", prompt)
   response = client.chat.completions.create(
-    model="gpt-4",
+    model="gpt-4o-mini",
     response_format={ "type": "json_object" },
     messages=[{
       "role": "user", "content": prompt
@@ -53,6 +64,7 @@ def fix_sentence():
     max_tokens=500,
   )
   res_json = json.loads(response.choices[0].message.content)
+  print("Response:", res_json)
   return Response(json.dumps({
     "sentence": sentence,
     "fixed_sentence": res_json["sentence"],
@@ -85,7 +97,8 @@ def intensive_training():
 
   sentences = request.json["sentences"]
   rule = request.json["rule"]
-  prompt = "Reply in french. Suivant cette règle : \"{}\" Les phrases :\n- {}\nSont elles correctes ? Répond avec du JSON avec un tableau d'objets qui prend comme clés \"sentence\" pour la phrase et la clé \"correct\" si cette dernière est correcte.".format(rule, "\n- ".join(sentences))
+  prompt = "Suivant la règle : \"{}\" Les phrases :\n- {}\nSont elles correctes ? Répond avec du JSON avec un tableau d'objets qui prend comme clés \"sentence\" pour la phrase et la clé \"correct\" si cette dernière est correcte.".format(rule, "\n- ".join(sentences))
+  print("Prompt:", prompt)
   response = client.chat.completions.create(
     model="gpt-4",
     response_format={ "type": "json_object" },
@@ -165,11 +178,12 @@ def nearest_word():
   word: str = request.json["word"]
   nearest_words: list = request.json["nearest_words"]
 
+  prompt = "Quel est le mot le plus proche de \"{}\" parmi : {}. Répond en json avec une clé \"word\".".format(word, ", ".join(nearest_words))
   nearest_word = json.loads(client.chat.completions.create(
     model="gpt-4",
     response_format={ "type": "json_object" },
     messages=[{
-      "role": "user", "content": "Reply in french. Quel est le mot le plus proche de \"{}\" parmis les suivants : {}. Répond en json avec une clé \"word\".".format(word, ", ".join(nearest_words))
+      "role": "user", "content": prompt
     }],
     max_tokens=500,
   ).choices[0].message.content)
