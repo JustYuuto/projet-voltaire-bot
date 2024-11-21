@@ -25,6 +25,7 @@ Pour utiliser le bot, il suffit de [lancer le serveur en local](#installer-le-se
 ### Installer le serveur en local
 
 1. Installez Python (**pensez à cocher "Add python.exe to PATH"**).
+   
    Je recommande d'utiliser Python 3.12 pour éviter les erreurs de compatibilité avec certaines dépendances.
 2. Ouvrez un terminal dans le dossier du repo
 3. Installez les dépendances avec la commande `pip install -r requirements.txt`
