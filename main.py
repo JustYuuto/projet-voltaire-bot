@@ -22,7 +22,7 @@ def home():
 @app.route("/robots.txt")
 def robots():
   """This route return the robots.txt file."""
-  response = Response("User-agent: *\nDisallow: /")
+  response = Response("User-agent: *\nDisallow:")
   response.content_type = "text/plain"
   return response
 
@@ -31,7 +31,7 @@ def fix_sentence():
   """
   This route will fix a sentence, given in the body of the request. Hence, the only method allowed is POST.
   In the body, one parameter need to be given: "sentence", which is the sentence to fix.
-  Here, we're using Gpt4Free to fix the sentence.
+  Here, we're using G4F to fix the sentence.
   """
   if not request.json or "sentence" not in request.json:
     response = Response(json.dumps({
@@ -40,7 +40,7 @@ def fix_sentence():
       "description": "The request must be a JSON with a key \"sentence\"."
     }), status=400, content_type="application/json")
     raise HTTPException("Bad Request", response=response)
-  
+
   now = datetime.now()
   sentence = request.json["sentence"]
   prompt = "Reply in french. Corrige les fautes dans cette phrase. Répond avec du JSON avec la clé \"sentence\" pour la phrase corrigée suivi de la clé \"word_to_click\" avec comme valeur le mot non corrigé qui a été corrigé. S'il n'y pas de faute \"word_to_click\" doit être null. \"{}\"".format(sentence)
@@ -82,7 +82,7 @@ def intensive_training():
       "description": "The request must be a JSON with a key \"sentences\" and a key \"rule\"."
     }), status=400, content_type="application/json")
     raise HTTPException("Bad Request", response=response)
-  
+
   sentences = request.json["sentences"]
   rule = request.json["rule"]
   prompt = "Reply in french. Suivant cette règle : \"{}\" Les phrases :\n- {}\nSont elles correctes ? Répond avec du JSON avec un tableau d'objets qui prend comme clés \"sentence\" pour la phrase et la clé \"correct\" si cette dernière est correcte.".format(rule, "\n- ".join(sentences))
@@ -111,7 +111,7 @@ def put_word():
       "description": "The request must be a JSON with a key \"sentence\" and a key \"audio_url\"."
     }), status=400, content_type="application/json")
     raise HTTPException("Bad Request", response=response)
-  
+
   sentence: str = request.json["sentence"]
   if "{}" not in sentence:
     response = Response(json.dumps({
@@ -161,7 +161,7 @@ def nearest_word():
       "description": "The request must be a JSON with a key \"word\" and a key \"nearest_words\"."
     }), status=400, content_type="application/json")
     raise HTTPException("Bad Request", response=response)
-  
+
   word: str = request.json["word"]
   nearest_words: list = request.json["nearest_words"]
 
