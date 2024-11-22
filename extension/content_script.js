@@ -158,8 +158,10 @@
       });
   }
   const run = async () => {
-    if (document.querySelector('.activity-selector-cell-launch-button:not([style^="display"])')) {
-      document.querySelector('.activity-selector-cell-launch-button:not([style^="display"])').click();
+    const activityLaunchButton = Array.from(document.querySelectorAll('.activity-selector-cell-launch-button, .validation-activity-cell-launch-button'))
+        .find((el) => el.style.display !== 'none');
+    if (activityLaunchButton) {
+      activityLaunchButton.click();
       await wait(1000);
       run();
     } else if (document.querySelector('.popupPanelLessonVideo')) {
