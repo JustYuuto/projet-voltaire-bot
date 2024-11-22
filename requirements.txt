@@ -1,5 +1,5 @@
 flask==3.0.2
-g4f==0.3.6.0
+g4f
 flask-cors==4.0.0
 requests==2.32.3
 SpeechRecognition==3.10.3
