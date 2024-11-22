@@ -53,11 +53,12 @@ def fix_sentence():
 
   now = datetime.now()
   sentence = request.json["sentence"]
-  prompt = "Corrige les fautes dans cette phrase : \"{}\". Répond avec du JSON avec la clé \"sentence\" pour la phrase corrigée suivi de la clé \"word_to_click\" avec comme valeur le mot non corrigé qui a été corrigé. S'il n'y pas de faute \"word_to_click\" doit être null.".format(sentence)
+  prompt = ("Corrige les fautes dans cette phrase : \"{}\". Répond avec du JSON avec la clé \"word_to_click\" avec "
+            "comme valeur le mot non corrigé qui a été corrigé, ou null s'il n'y a pas de fautes.").format(sentence)
   print("Prompt:", prompt)
   response = client.chat.completions.create(
-    model="gpt-4o-mini",
-    response_format={ "type": "json_object" },
+    model="gpt-4",
+    response_format={"type": "json_object"},
     messages=[{
       "role": "user", "content": prompt
     }],
@@ -66,8 +67,6 @@ def fix_sentence():
   res_json = json.loads(response.choices[0].message.content)
   print("Response:", res_json)
   return Response(json.dumps({
-    "sentence": sentence,
-    "fixed_sentence": res_json["sentence"],
     "word_to_click": res_json["word_to_click"],
     "time_taken": (datetime.now() - now).total_seconds(),
   }), content_type="application/json")
@@ -97,11 +96,13 @@ def intensive_training():
 
   sentences = request.json["sentences"]
   rule = request.json["rule"]
-  prompt = "Suivant la règle : \"{}\" Les phrases :\n- {}\nSont elles correctes ? Répond avec du JSON avec un tableau d'objets qui prend comme clés \"sentence\" pour la phrase et la clé \"correct\" si cette dernière est correcte.".format(rule, "\n- ".join(sentences))
+  #prompt = "Suivant la règle : \"{}\" Les phrases :\n- {}\nSont elles correctes ? Répond avec du JSON avec un tableau d'objets qui prend comme clés \"sentence\" pour la phrase et la clé \"correct\" si cette dernière est correcte.".format(rule, "\n- ".join(sentences))
+  prompt = ("Les phrases :\n- {}\nSont elles correctes ? Répond avec un tableau JSON qui prend comme valeur un boolean"
+            " si cette dernière est correcte (sous le format [true, false, true]).".format("\n- ".join(sentences)))
   print("Prompt:", prompt)
   response = client.chat.completions.create(
     model="gpt-4",
-    response_format={ "type": "json_object" },
+    response_format={"type": "json_object"},
     messages=[{
       "role": "user", "content": prompt
     }],

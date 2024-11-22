@@ -15,21 +15,25 @@
       body: JSON.stringify({ sentence }),
     })
       .then((response) => {
-        // if the response from the server is more than 10s, vercel will reply with a 504
         if (response.status !== 200 || !response.ok) {
-          return processSentence();
+          processSentence();
+          return;
         }
         return response.json();
       })
-      .then(async ({ word_to_click, sentence }) => {
+      .then(async (res) => {
+        if (!res) return;
+        const { word_to_click } = res;
         console.log('[Projet Voltaire Bot] Correction de la phrase :', sentence);
         if (word_to_click && word_to_click !== 'null') {
           console.log('[Projet Voltaire Bot] Mot à cliquer :', word_to_click);
+          console.log(Array.from(document.querySelectorAll('.pointAndClickSpan')));
           const element = Array.from(document.querySelectorAll('.pointAndClickSpan')).find((el) => {
-            return el.textContent === word_to_click || el.textContent.includes(word_to_click) ||
+            return el.textContent === word_to_click || //el.textContent.includes(word_to_click) ||
               // the dash is a special character in the html and not a normal dash!!
-              word_to_click.split('‑').some((word) => el.textContent.includes(word)) ||
-              word_to_click.split('\'').some((word) => el.textContent.includes(word));
+              word_to_click.split('‑').some((word) => el.textContent === word) ||
+              word_to_click.split('-').some((word) => el.textContent === word) ||
+              word_to_click.split('\'').some((word) => el.textContent === word);
           });
           element.click();
         } else {
@@ -43,9 +47,8 @@
       })
       .catch((error) => {
         console.error('[Projet Voltaire Bot] Erreur lors de la correction de la phrase :', error);
-        if (error.message === 'Failed to fetch') {
+        if (error.message === 'Failed to fetch')
           processSentence();
-        }
       });
   }
 
@@ -67,7 +70,7 @@
       return response.json();
     }).then(async (res) => {
       for (let i = 0; i < res.length; i++) {
-        const correct = res[i].correct;
+        const correct = res[i];
         document.querySelectorAll('.intensiveQuestion')[i].querySelector(`.button${correct ? 'Ok' : 'Ko'}`).click();
       }
       await wait(500);
@@ -92,15 +95,16 @@
     if (!document.querySelector('.sentenceAudioReader')) return;
     await wait(500);
     console.log('[Projet Voltaire Bot] Exercice avec voix détecté');
+    let sentence = document.querySelector('.sentenceOuter .sentence').textContent
+        .replace('  ', ' {} ')
+        .replace(' .', ' {}.')
+        .replace('\',', '\'{},')
+        .replace(' -', ' {}-')
+    if (sentence.startsWith(' ')) sentence = '{} ' + sentence;
     fetch(apiUrl + '/put-word', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        sentence: document.querySelector('.sentenceOuter .sentence').textContent.replace('  ', ' {} ').replace(' .', ' {}.'),
-        audio_url: url,
-      }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sentence, audio_url: url }),
     })
       .then((response) => {
         if (response.status !== 200 || !response.ok) {
