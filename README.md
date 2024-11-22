@@ -7,10 +7,30 @@ Une API en Python pour "botter" le projet Voltaire en utilisant GPT-4. Etant don
 
 ## Taux de réussite
 
-| Entraînement | Fonctionne ?          |
-|--------------|-----------------------|
-| Orthographe  | À tester complètement |
-| Expression   | Oui nickel            |
+<table>
+   <thead>
+      <tr>
+         <th>Entraînement</th>
+         <th>Fonctionne ?</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td>Orthographe</td>
+         <td>
+            <ul>
+               <li>Entrainement intensif : marche très bien</li>
+               <li>Clic sur les fautes : marche mais fait des fautes des fois</li>
+               <li>Mot à remplir avec l'audio : ✅</li>
+            </ul>
+         </td>
+      </tr>
+      <tr>
+         <td>Expression</td>
+         <td>Oui nickel</td>
+      </tr>
+   </tbody>
+</table>
 
 ## Utilisation
 
