@@ -9,7 +9,7 @@ import requests
 import subprocess
 import os
 import os.path
-from g4f.cookies import set_cookies_dir, read_cookie_files
+from g4f.cookies import set_cookies, get_cookies
 import asyncio
 import g4f.debug
 g4f.debug.logging = True
@@ -20,8 +20,8 @@ CORS(app, origins="https://www.projet-voltaire.fr")
 client = Client()
 if os.path.exists("har_and_cookies"):
   cookies_dir = os.path.join(os.path.dirname(__file__), "har_and_cookies")
-  set_cookies_dir(cookies_dir)
-  read_cookie_files(cookies_dir)
+  set_cookies(cookies_dir)
+  get_cookies(cookies_dir)  # Modification ici
 r = sr.Recognizer()
 
 @app.route("/")
