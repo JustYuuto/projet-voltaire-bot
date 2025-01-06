@@ -12,7 +12,6 @@ import os.path
 from g4f.cookies import set_cookies_dir, read_cookie_files
 import asyncio
 import g4f.debug
-import os
 g4f.debug.logging = True
 
 if os.name == "nt":
