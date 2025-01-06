@@ -14,7 +14,8 @@ import asyncio
 import g4f.debug
 g4f.debug.logging = True
 
-asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+if os.environ.get('OS','') == 'Windows_NT':
+  asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 app = Flask(__name__)
 CORS(app, origins="https://www.projet-voltaire.fr")
 client = Client()
