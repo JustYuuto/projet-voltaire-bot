@@ -5,33 +5,6 @@ Une API en Python pour "botter" le projet Voltaire en utilisant GPT-4. Etant don
 > [!NOTE]
 > Ce projet est à but purement éducatif, je ne suis pas responsable de l'utilisation que vous en faites. Si vous vous faites choper en train de tricher c'est pas ma faute mdrrr 🫵🫵😂😂
 
-## Taux de réussite
-
-<table>
-   <thead>
-      <tr>
-         <th>Entraînement</th>
-         <th>Fonctionne ?</th>
-      </tr>
-   </thead>
-   <tbody>
-      <tr>
-         <td>Orthographe</td>
-         <td>
-            <ul>
-               <li>Entrainement intensif : marche très bien</li>
-               <li>Clic sur les fautes : marche mais fait des fautes des fois</li>
-               <li>Mot à remplir avec l'audio : ✅</li>
-            </ul>
-         </td>
-      </tr>
-      <tr>
-         <td>Expression</td>
-         <td>Oui nickel</td>
-      </tr>
-   </tbody>
-</table>
-
 ## Utilisation
 
 Première chose, télécharger le repo : https://github.com/JustYuuto/projet-voltaire-bot/archive/refs/heads/master.zip
@@ -75,3 +48,30 @@ Pour utiliser le bot, il suffit de [lancer le serveur en local](#installer-le-se
 3. Cliquez sur "Load Temporary Add-on"
 4. Sélectionnez le fichier `manifest.json` du dossier `extension` de ce repo
 5. Pour que l'extension s'active, rendez vous sur une page du projet Voltaire, et cliquez sur l'icône de l'extension en haut à droite de votre navigateur.
+
+## Taux de réussite
+
+<table>
+   <thead>
+      <tr>
+         <th>Entraînement</th>
+         <th>Fonctionne ?</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td>Orthographe</td>
+         <td>
+            <ul>
+               <li>Entrainement intensif : marche très bien</li>
+               <li>Clic sur les fautes : marche mais fait des fautes des fois</li>
+               <li>Mot à remplir avec l'audio : ✅</li>
+            </ul>
+         </td>
+      </tr>
+      <tr>
+         <td>Expression</td>
+         <td>Oui nickel</td>
+      </tr>
+   </tbody>
+</table>
