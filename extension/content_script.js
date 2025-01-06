@@ -1,5 +1,4 @@
 (() => {
-  // const apiUrl = 'https://projet-voltaire-bot.vercel.app';
   const apiUrl = 'http://localhost:5000';
 
   const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -35,12 +34,14 @@
               word_to_click.split('-').some((word) => el.textContent === word) ||
               word_to_click.split('\'').some((word) => el.textContent === word);
           });
+          console.log('[Projet Voltaire Bot] Element trouvé :', element);
+          await wait(/*10*/500);
           element.click();
         } else {
           console.log('[Projet Voltaire Bot] Aucune erreur détectée dans la phrase');
           document.querySelector('.noMistakeButton').click();
         }
-        await wait(500);
+        await wait(/*20*/500);
         document.querySelector('.nextButton').click();
         await wait(1000);
         run();
