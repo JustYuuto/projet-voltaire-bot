@@ -35,13 +35,13 @@
               word_to_click.split('\'').some((word) => el.textContent === word);
           });
           console.log('[Projet Voltaire Bot] Element trouvé :', element);
-          await wait(/*10*/500);
+          await wait(10);
           element.click();
         } else {
           console.log('[Projet Voltaire Bot] Aucune erreur détectée dans la phrase');
           document.querySelector('.noMistakeButton').click();
         }
-        await wait(/*20*/500);
+        await wait(20);
         document.querySelector('.nextButton').click();
         await wait(1000);
         run();
