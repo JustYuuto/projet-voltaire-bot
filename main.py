@@ -12,9 +12,12 @@ import os.path
 from g4f.cookies import set_cookies_dir, read_cookie_files
 import asyncio
 import g4f.debug
+import os
 g4f.debug.logging = True
 
-asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+if os.name == "nt":
+  asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
 app = Flask(__name__)
 CORS(app, origins="https://www.projet-voltaire.fr")
 client = Client()
