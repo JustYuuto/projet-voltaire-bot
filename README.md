@@ -12,7 +12,7 @@ Première chose, télécharger le repo : https://github.com/JustYuuto/projet-vol
 Pour utiliser le bot, il suffit de [lancer le serveur en local](#installer-le-serveur-en-local) et d'installer [l'extension dans votre navigateur](#installer-lextension).
 
 > [!WARNING]
-> **Attention :** L'extension ne fonctionne qu'avec cette interface du projet Voltaire : 
+> **Attention :** L'extension ne fonctionne qu'avec cette interface du projet Voltaire. Si vous utilisez une autre interface, l'extension **ne FONCTIONNERA PAS**. Si vous vous y connaissez en JS/Python, libre à vous de modifier le code pour qu'il fonctionne avec d'autres interfaces.
 > ![Interface du projet Voltaire](/screenshot.png)
 
 ### Installer le serveur en local
